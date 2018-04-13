@@ -22,6 +22,7 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl_ros/impl/transforms.hpp>
 #include <pcl_conversions/pcl_conversions.h>
+#include <pcl/console/parse.h>
 
 namespace rslidar_rangeimage
 {
@@ -42,15 +43,15 @@ namespace rslidar_rangeimage
         pcl::visualization::RangeImageVisualizer rangevisual;
 
         // Rangeimage Config Parameters
-        float angular_resolution_x = 0.1f,
-              angular_resolution_y = 0.1f;
-        float max_angle_width = 360.0f;
-        float max_angle_height = 180.0f;
-        Eigen::Affine3f sensor_pose (Eigen::Affine3f::Identity());
-        pcl::RangeImage::CoordinateFrame coordinate_frame = pcl::RangeImage::CAMERA_FRAME;
-        float nosie_level = 0.0f;
-        float min_range = 0.0f;
-        int border_size = 0;
+        float angular_resolution_x,
+              angular_resolution_y;
+        float max_angle_width;
+        float max_angle_height;
+        Eigen::Affine3f sensor_pose;
+        pcl::RangeImage::CoordinateFrame coordinate_frame;
+        float nosie_level;
+        float min_range;
+        int border_size;
 
     };
 }
