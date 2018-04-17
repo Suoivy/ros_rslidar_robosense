@@ -16,7 +16,8 @@ namespace rslidar_rangeimage
 {
     RangeConvert::RangeConvert(ros::NodeHandle node, int argc, char** argv) :
         rangeimagePtr(new pcl::RangeImage),
-        pointcloudPtr(new pcl::PointCloud<pcl::PointXYZ>)
+        pointcloudPtr(new pcl::PointCloud<PointType>),
+        visualization(true)
     {
         // subscribe to rslidar_pointcloud node
         // Type: sensor_msgs::PointCloud2 
@@ -63,7 +64,11 @@ namespace rslidar_rangeimage
             std::cout << "Setting position of y-axis to "<<position_y<<"deg.\n";
         if (pcl::console::parse (argc, argv, "-pz", position_z) >= 0)
             std::cout << "Setting position of z-axis to "<<position_z<<"deg.\n";
-        
+        if (pcl::console::find_argument (argc, argv, "-v") >= 0)
+        {
+            visualization = false;
+            std::cout << "Stop the Rangeimage Visualizer\n";
+        }
         if (pcl::console::find_argument (argc, argv, "-h") >= 0)
         {
             printUsage (argv[0]);
@@ -101,6 +106,7 @@ namespace rslidar_rangeimage
                   << "-px <float>   positon_x (default "<<position_x<<")\n" 
                   << "-py <float>   positon_y (default "<<position_y<<")\n"
                   << "-pz <float>   positon_z (default "<<position_z<<")\n"
+                  << "-v            stop rangeimage visualizer\n"
                   << "-h            this help\n"
                   << "\n";
                   
@@ -109,7 +115,7 @@ namespace rslidar_rangeimage
     void RangeConvert::Conversion(const sensor_msgs::PointCloud2::ConstPtr &pointMsg)
     {
         // Instantination
-        pcl::PointCloud<pcl::PointXYZ>& pointcloud = *pointcloudPtr;
+        pcl::PointCloud<PointType>& pointcloud = *pointcloudPtr;
         pcl::RangeImage& rangeimage = *rangeimagePtr;
 
         // Convert ros sensor_msgs::PointCloud2 to pcl::PointCloud
@@ -132,7 +138,10 @@ namespace rslidar_rangeimage
                                         max_angle_width,max_angle_height,sensor_pose,
                                         coordinate_frame,nosie_level, min_range,border_size);
         // rangeimage visualization
-        rangevisual.showRangeImage(rangeimage);
+        if(visualization)
+        {
+            rangevisual.showRangeImage(rangeimage);
+        }
 
     }
 

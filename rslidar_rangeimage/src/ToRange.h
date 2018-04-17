@@ -25,6 +25,8 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/console/parse.h>
 
+typedef pcl::PointXYZI PointType;
+
 namespace rslidar_rangeimage
 {
     class RangeConvert 
@@ -43,7 +45,7 @@ namespace rslidar_rangeimage
         ros::Publisher range_image_;
 
         // Define PointCloud
-        pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloudPtr;
+        pcl::PointCloud<PointType>::Ptr pointcloudPtr;
         // Define RangeImage
         pcl::RangeImage::Ptr rangeimagePtr;
 
@@ -64,7 +66,9 @@ namespace rslidar_rangeimage
         float position_x;
         float position_y;
         float position_z;
+
         // RangeImage Visualizer
+        bool visualization;
         pcl::visualization::RangeImageVisualizer rangevisual;
 
     };
