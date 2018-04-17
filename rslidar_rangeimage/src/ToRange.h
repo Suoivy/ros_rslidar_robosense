@@ -19,6 +19,7 @@
 #include <pcl/point_types.h>
 #include <pcl/range_image/range_image.h>
 #include <pcl/visualization/range_image_visualizer.h>
+#include <pcl/visualization/pcl_visualizer.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl_ros/impl/transforms.hpp>
 #include <pcl_conversions/pcl_conversions.h>
@@ -40,7 +41,11 @@ namespace rslidar_rangeimage
 
         ros::Subscriber rslidar_pointcloud_;
         ros::Publisher range_image_;
-        pcl::visualization::RangeImageVisualizer rangevisual;
+
+        // Define PointCloud
+        pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloudPtr;
+        // Define RangeImage
+        pcl::RangeImage::Ptr rangeimagePtr;
 
         // Rangeimage Config Parameters
         float angular_resolution_x,
@@ -52,6 +57,15 @@ namespace rslidar_rangeimage
         float nosie_level;
         float min_range;
         int border_size;
+        // sensor pose
+        float angular_rotation_x;
+        float angular_rotation_y;
+        float angular_rotation_z;
+        float position_x;
+        float position_y;
+        float position_z;
+        // RangeImage Visualizer
+        pcl::visualization::RangeImageVisualizer rangevisual;
 
     };
 }
