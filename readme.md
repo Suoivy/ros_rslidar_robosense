@@ -53,6 +53,7 @@ If you have more than one RSLIDAR, you can create new sub-directories under the 
 
 /**Mofied by Chuanzhe Suo**/
 #### 6. Read lidar data stream from pcap file
+```
 cd ~/catkin_ws
 source devel/setup.bash
 roslaunch rslidar_pointcloud rs_lidar_32_pcap.launch path:=<your pcap file path>
