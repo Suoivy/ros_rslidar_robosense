@@ -50,3 +50,11 @@ Under "**rslidar_pointcloud/data**" directory, you can find the lidar data files
 - rslidar_pointcloud/data/rs_lidar_16/curves.csv.
 
 If you have more than one RSLIDAR, you can create new sub-directories under the "**rslidar_pointcloud/data/**", and put the data files into it.Then you need rewrite the launch file to start you lidar. We have put an example launch file "two_lidar.launch" to load two lidars together for reference.
+
+/**Mofied by Chuanzhe Suo**/
+#### 6. Read lidar data stream from pcap file
+cd ~/catkin_ws
+source devel/setup.bash
+roslaunch rslidar_pointcloud rs_lidar_32_pcap.launch path:=<your pcap file path>
+```
+

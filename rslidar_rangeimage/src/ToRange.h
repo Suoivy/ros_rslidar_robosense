@@ -20,10 +20,16 @@
 #include <pcl/range_image/range_image.h>
 #include <pcl/visualization/range_image_visualizer.h>
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/visualization/common/float_image_utils.h>
+#include <pcl/io/png_io.h>
+// #include <pcl/io/image.h>
 #include <pcl_ros/point_cloud.h>
 #include <pcl_ros/impl/transforms.hpp>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/console/parse.h>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 typedef pcl::PointXYZI PointType;
 
@@ -48,6 +54,8 @@ namespace rslidar_rangeimage
         pcl::PointCloud<PointType>::Ptr pointcloudPtr;
         // Define RangeImage
         pcl::RangeImage::Ptr rangeimagePtr;
+        // Define RangePCLImage
+        // pcl::io::Image::Ptr  rangepclimagePtr;
 
         // Rangeimage Config Parameters
         float angular_resolution_x,
@@ -67,9 +75,15 @@ namespace rslidar_rangeimage
         float position_y;
         float position_z;
 
+        // RangeImage range array
+        float* ranges;
+
         // RangeImage Visualizer
         bool visualization;
         pcl::visualization::RangeImageVisualizer rangevisual;
+
+        // Record dataset
+        bool recorddata;
 
     };
 }

@@ -17,7 +17,8 @@ namespace rslidar_rangeimage
     RangeConvert::RangeConvert(ros::NodeHandle node, int argc, char** argv) :
         rangeimagePtr(new pcl::RangeImage),
         pointcloudPtr(new pcl::PointCloud<PointType>),
-        visualization(true)
+        visualization(true),
+        recorddata(false)
     {
         // subscribe to rslidar_pointcloud node
         // Type: sensor_msgs::PointCloud2 
@@ -69,6 +70,12 @@ namespace rslidar_rangeimage
             visualization = false;
             std::cout << "Stop the Rangeimage Visualizer\n";
         }
+        if (pcl::console::find_argument (argc, argv, "-r") >= 0)
+        {
+            recorddata = true;
+            std::cout << "Record data(png and txt) to current path\n";
+        }
+
         if (pcl::console::find_argument (argc, argv, "-h") >= 0)
         {
             printUsage (argv[0]);
@@ -107,6 +114,7 @@ namespace rslidar_rangeimage
                   << "-py <float>   positon_y (default "<<position_y<<")\n"
                   << "-pz <float>   positon_z (default "<<position_z<<")\n"
                   << "-v            stop rangeimage visualizer\n"
+                  << "-r            record the dataset contains png and txt\n"
                   << "-h            this help\n"
                   << "\n";
                   
@@ -117,6 +125,7 @@ namespace rslidar_rangeimage
         // Instantination
         pcl::PointCloud<PointType>& pointcloud = *pointcloudPtr;
         pcl::RangeImage& rangeimage = *rangeimagePtr;
+        // pcl::io::Image& rangepclimage = *rangepclimagePtr;
 
         // Convert ros sensor_msgs::PointCloud2 to pcl::PointCloud
         pcl::fromROSMsg(*pointMsg, pointcloud);
@@ -142,6 +151,35 @@ namespace rslidar_rangeimage
         {
             rangevisual.showRangeImage(rangeimage);
         }
+
+        // Record the dataset contains png and txt 
+        if(recorddata)
+        {
+            std::stringstream filename;
+            filename << "range" <<  pointMsg->header.stamp.sec;
+            std::string pngname = filename.str()+".png";
+            std::string rangename = filename.str()+".txt";
+
+            ranges = rangeimage.getRangesArray();
+            unsigned char* rgb_image = pcl::visualization::FloatImageUtils::getVisualImage(ranges, rangeimage.width, rangeimage.height);
+            pcl::io::saveRgbPNGFile(pngname.c_str(), rgb_image, rangeimage.width, rangeimage.height);
+
+            std::ofstream rangefile;
+            rangefile.open(rangename.c_str(),ios::trunc|ios::out);
+            for (int i=0; i<rangeimage.height; i++)
+            {
+                for(int j=0; j<rangeimage.width; j++)
+                {
+                    rangefile << ranges[i*rangeimage.width + j] << ", ";
+                }
+                rangefile <<"\n";
+            }
+            std::cout<<rangeimage.width<<"  "<<rangeimage.height<<endl;
+            
+            rangefile.close();
+
+        }
+        
 
     }
 
